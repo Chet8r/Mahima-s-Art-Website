@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  --color-navy: #0b2545;
+  --color-navy-deep: #081a33;
+  --color-navy-soft: #1e3a66;
+  --color-gold: #d8b863;
+  --color-gold-soft: #e4cf94;
+  --color-cream: #faf7f2;
+  --color-cream-soft: #f3eee5;
+  --color-ink: #1a1a1a;
+  --color-muted: #6b6f76;
+  --color-line: #e7e1d4;
+
+  --background: var(--color-cream);
+  --foreground: var(--color-ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-navy: var(--color-navy);
+  --color-navy-deep: var(--color-navy-deep);
+  --color-navy-soft: var(--color-navy-soft);
+  --color-gold: var(--color-gold);
+  --color-gold-soft: var(--color-gold-soft);
+  --color-cream: var(--color-cream);
+  --color-cream-soft: var(--color-cream-soft);
+  --color-ink: var(--color-ink);
+  --color-muted: var(--color-muted);
+  --color-line: var(--color-line);
+  --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-cormorant);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}

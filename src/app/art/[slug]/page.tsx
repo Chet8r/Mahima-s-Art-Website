@@ -1,10 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { artworks, getArtworkBySlug, formatPrice } from "@/lib/artworks";
+import {
+  getAllArtworks,
+  getArtworkBySlug,
+  formatPrice,
+} from "@/lib/artworks";
 
-export function generateStaticParams() {
-  return artworks.map((a) => ({ slug: a.slug }));
+export async function generateStaticParams() {
+  const all = await getAllArtworks();
+  return all.map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({
@@ -13,7 +18,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const artwork = getArtworkBySlug(slug);
+  const artwork = await getArtworkBySlug(slug);
   if (!artwork) return {};
   return {
     title: artwork.title,
@@ -27,7 +32,7 @@ export default async function ArtworkPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const artwork = getArtworkBySlug(slug);
+  const artwork = await getArtworkBySlug(slug);
   if (!artwork) notFound();
 
   const isSold = artwork.status === "sold";

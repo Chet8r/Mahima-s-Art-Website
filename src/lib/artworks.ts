@@ -1,135 +1,93 @@
-export type ArtworkStatus = "available" | "reserved" | "sold";
+import "server-only";
+import { supabaseServer } from "@/lib/supabase/server";
+import type { Artwork, ArtworkStatus } from "@/lib/artwork-types";
 
-export type Artwork = {
+export type { Artwork, ArtworkStatus };
+export { formatPrice } from "@/lib/format";
+
+const CLOUDINARY_CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+
+function imageUrlFromPublicId(publicId: string): string {
+  if (publicId.startsWith("placeholder/")) {
+    const seed = publicId.replace("placeholder/", "");
+    return `https://picsum.photos/seed/${seed}/800/1000`;
+  }
+  if (!CLOUDINARY_CLOUD) {
+    return `https://picsum.photos/seed/${encodeURIComponent(publicId)}/800/1000`;
+  }
+  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/upload/f_auto,q_auto/${publicId}`;
+}
+
+type ArtworkWithImages = {
   id: string;
   slug: string;
   title: string;
   year: number;
   medium: string;
   dimensions: string;
-  price: number;
+  price_pence: number;
   status: ArtworkStatus;
-  imageUrl: string;
   description: string;
+  position: number;
+  artwork_images: {
+    cloudinary_public_id: string;
+    alt: string;
+    is_primary: boolean;
+    position: number;
+  }[];
 };
 
-const placeholder = (seed: string, w = 800, h = 1000) =>
-  `https://picsum.photos/seed/${seed}/${w}/${h}`;
+function toArtwork(row: ArtworkWithImages): Artwork {
+  const primary =
+    row.artwork_images.find((i) => i.is_primary) ??
+    [...row.artwork_images].sort((a, b) => a.position - b.position)[0];
 
-export const artworks: Artwork[] = [
-  {
-    id: "1",
-    slug: "evening-harbour",
-    title: "Evening Harbour",
-    year: 2025,
-    medium: "Oil on canvas",
-    dimensions: "40 × 50 cm",
-    price: 480,
-    status: "available",
-    imageUrl: placeholder("mahi-1"),
-    description:
-      "A study of light over still water at dusk. Layered glazes build a deep, lingering blue.",
-  },
-  {
-    id: "2",
-    slug: "morning-light",
-    title: "Morning Light",
-    year: 2025,
-    medium: "Oil on linen",
-    dimensions: "30 × 40 cm",
-    price: 360,
-    status: "sold",
-    imageUrl: placeholder("mahi-2"),
-    description:
-      "Captured in early hours by the window — warm whites against soft shadow.",
-  },
-  {
-    id: "3",
-    slug: "field-of-cobalt",
-    title: "Field of Cobalt",
-    year: 2024,
-    medium: "Oil on canvas",
-    dimensions: "50 × 70 cm",
-    price: 720,
-    status: "available",
-    imageUrl: placeholder("mahi-3"),
-    description:
-      "Inspired by lavender fields under cloud — a meditation on saturation and quiet.",
-  },
-  {
-    id: "4",
-    slug: "still-life-with-pears",
-    title: "Still Life with Pears",
-    year: 2024,
-    medium: "Oil on board",
-    dimensions: "25 × 30 cm",
-    price: 280,
-    status: "available",
-    imageUrl: placeholder("mahi-4"),
-    description:
-      "Three pears, a linen cloth, and the patience of a long afternoon.",
-  },
-  {
-    id: "5",
-    slug: "coastal-fog",
-    title: "Coastal Fog",
-    year: 2025,
-    medium: "Oil on canvas",
-    dimensions: "45 × 60 cm",
-    price: 560,
-    status: "reserved",
-    imageUrl: placeholder("mahi-5"),
-    description:
-      "The horizon disappears into vapour — painted on location over three mornings.",
-  },
-  {
-    id: "6",
-    slug: "navy-and-bone",
-    title: "Navy and Bone",
-    year: 2024,
-    medium: "Oil on linen",
-    dimensions: "35 × 45 cm",
-    price: 420,
-    status: "available",
-    imageUrl: placeholder("mahi-6"),
-    description:
-      "An abstract composition built around two anchoring tones.",
-  },
-  {
-    id: "7",
-    slug: "after-the-rain",
-    title: "After the Rain",
-    year: 2025,
-    medium: "Oil on canvas",
-    dimensions: "40 × 40 cm",
-    price: 400,
-    status: "available",
-    imageUrl: placeholder("mahi-7"),
-    description:
-      "Reflections on wet pavement — a small love letter to ordinary streets.",
-  },
-  {
-    id: "8",
-    slug: "studio-window",
-    title: "Studio Window",
-    year: 2024,
-    medium: "Oil on board",
-    dimensions: "20 × 25 cm",
-    price: 220,
-    status: "sold",
-    imageUrl: placeholder("mahi-8"),
-    description: "The view from the easel on a grey Tuesday.",
-  },
-];
-
-export function getArtworkBySlug(slug: string): Artwork | undefined {
-  return artworks.find((a) => a.slug === slug);
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    year: row.year,
+    medium: row.medium,
+    dimensions: row.dimensions,
+    price: row.price_pence / 100,
+    status: row.status,
+    imageUrl: primary
+      ? imageUrlFromPublicId(primary.cloudinary_public_id)
+      : `https://picsum.photos/seed/${row.slug}/800/1000`,
+    description: row.description,
+  };
 }
 
-export function formatPrice(amount: number, currency = "GBP"): string {
-  return new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  }).format(amount);
+const ARTWORK_COLUMNS =
+  "id, slug, title, year, medium, dimensions, price_pence, status, description, position, artwork_images(cloudinary_public_id, alt, is_primary, position)";
+
+export async function getAllArtworks(): Promise<Artwork[]> {
+  const { data, error } = await supabaseServer
+    .from("artworks")
+    .select(ARTWORK_COLUMNS)
+    .order("position", { ascending: true });
+
+  if (error) {
+    console.error("Failed to load artworks", error);
+    return [];
+  }
+
+  return (data as ArtworkWithImages[]).map(toArtwork);
+}
+
+export async function getArtworkBySlug(
+  slug: string
+): Promise<Artwork | null> {
+  const { data, error } = await supabaseServer
+    .from("artworks")
+    .select(ARTWORK_COLUMNS)
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Failed to load artwork", error);
+    return null;
+  }
+  if (!data) return null;
+  return toArtwork(data as ArtworkWithImages);
 }

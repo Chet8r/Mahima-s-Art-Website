@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Artwork, formatPrice } from "@/lib/artworks";
+import type { Artwork } from "@/lib/artwork-types";
+import { formatPrice } from "@/lib/format";
 
 export function ArtworkCard({ artwork }: { artwork: Artwork }) {
   const isSold = artwork.status === "sold";

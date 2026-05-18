@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { artworks } from "@/lib/artworks";
+import { getAllArtworks } from "@/lib/artworks";
 import { ArtworkCard } from "@/components/artwork-card";
 
-export default function Home() {
+export default async function Home() {
+  const artworks = await getAllArtworks();
   return (
     <>
       <section className="relative min-h-[85vh] flex items-center overflow-hidden">

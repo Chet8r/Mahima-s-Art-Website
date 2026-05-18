@@ -4,95 +4,72 @@ import { artworks } from "@/lib/artworks";
 import { ArtworkCard } from "@/components/artwork-card";
 
 export default function Home() {
-  const featured = artworks.slice(0, 3);
-
   return (
     <>
-      <section className="relative">
-        <div className="mx-auto max-w-7xl px-6 sm:px-10 pt-16 pb-20 sm:pt-24 sm:pb-28 grid gap-12 lg:grid-cols-2 lg:items-center">
-          <div>
-            <p className="text-xs uppercase tracking-[0.28em] text-gold mb-6">
-              Original Oil Paintings
-            </p>
-            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-navy leading-[1.05]">
+      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+        <Image
+          src="/hero-wall.png"
+          alt="Original oil paintings displayed on a wall"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover -z-10"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-gradient-to-r from-black/70 via-black/45 to-black/20"
+        />
+        <div className="relative mx-auto max-w-7xl w-full px-6 sm:px-10 py-24">
+          <div className="max-w-2xl">
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-cream leading-[1.05] drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
               Quiet works,
               <br />
-              <span className="italic text-navy-soft">painted slowly.</span>
+              <span className="italic text-gold-soft">painted slowly.</span>
             </h1>
-            <p className="mt-8 text-lg text-muted max-w-md leading-relaxed">
-              A small collection of one-of-a-kind oil paintings by Mahi Patel.
-              Each piece is hand-painted in the studio and signed by the artist.
+            <p className="mt-8 text-lg text-cream/85 max-w-md leading-relaxed">
+              A small collection of one-of-a-kind paintings by Mahi. Each
+              piece is hand-painted in-house and signed by the artist.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link
-                href="/shop"
-                className="inline-flex items-center justify-center h-12 px-7 bg-navy text-cream text-sm uppercase tracking-[0.18em] hover:bg-navy-deep transition-colors"
+                href="#collection"
+                className="inline-flex items-center justify-center h-12 px-7 bg-cream text-navy text-sm uppercase tracking-[0.18em] hover:bg-gold transition-colors"
               >
                 View the Collection
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center h-12 px-7 border border-navy text-navy text-sm uppercase tracking-[0.18em] hover:bg-navy hover:text-cream transition-colors"
+                className="inline-flex items-center justify-center h-12 px-7 border border-cream text-cream text-sm uppercase tracking-[0.18em] hover:bg-cream hover:text-navy transition-colors"
               >
                 Commission a Piece
               </Link>
             </div>
           </div>
-          <div className="relative aspect-[4/5] lg:aspect-[3/4] w-full max-w-lg justify-self-center lg:justify-self-end">
-            <div className="absolute -inset-3 border border-gold/40" aria-hidden />
-            <Image
-              src="https://picsum.photos/seed/mahi-hero/900/1200"
-              alt="Featured oil painting"
-              fill
-              priority
-              sizes="(min-width: 1024px) 40vw, 90vw"
-              className="object-cover"
-            />
-          </div>
         </div>
       </section>
 
-      <section className="bg-cream-soft border-y border-line">
+      <section
+        id="collection"
+        className="bg-cream-soft border-y border-line scroll-mt-20"
+      >
         <div className="mx-auto max-w-7xl px-6 sm:px-10 py-20">
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-gold mb-3">
-                Featured
-              </p>
-              <h2 className="font-display text-4xl sm:text-5xl text-navy">
-                Recent works
-              </h2>
-            </div>
-            <Link
-              href="/shop"
-              className="hidden sm:inline text-sm uppercase tracking-[0.18em] text-navy hover:text-gold transition-colors"
-            >
-              See all →
-            </Link>
+          <div className="max-w-2xl mb-14">
+            <p className="text-xs uppercase tracking-[0.28em] text-gold mb-3">
+              The Collection
+            </p>
+            <h2 className="font-display text-4xl sm:text-5xl text-navy leading-tight">
+              Available <span className="italic text-navy-soft">works</span>
+            </h2>
+            <p className="mt-5 text-base text-muted leading-relaxed">
+              Every painting below is original and one of a kind. Shipping is
+              arranged on a per-piece basis after purchase.
+            </p>
           </div>
-          <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((artwork) => (
+          <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+            {artworks.map((artwork) => (
               <ArtworkCard key={artwork.id} artwork={artwork} />
             ))}
           </div>
-        </div>
-      </section>
-
-      <section>
-        <div className="mx-auto max-w-3xl px-6 sm:px-10 py-24 text-center">
-          <p className="text-xs uppercase tracking-[0.28em] text-gold mb-6">
-            About the artist
-          </p>
-          <h2 className="font-display text-4xl sm:text-5xl text-navy leading-tight">
-            Painting from a small studio,
-            <br />
-            <span className="italic text-navy-soft">one canvas at a time.</span>
-          </h2>
-          <p className="mt-8 text-lg text-muted leading-relaxed">
-            Mahi Patel works in oils, drawn to the slow patience of layered
-            glazes and the way light settles on quiet subjects. Every painting
-            here is original — there are no prints, no copies.
-          </p>
         </div>
       </section>
     </>

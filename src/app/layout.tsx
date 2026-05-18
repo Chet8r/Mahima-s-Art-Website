@@ -18,11 +18,11 @@ const cormorant = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   title: {
-    default: "Mahi Patel Art — Original Oil Paintings",
-    template: "%s — Mahi Patel Art",
+    default: "Mahi Art — Original Oil Paintings",
+    template: "%s — Mahi Art",
   },
   description:
-    "Original oil paintings by Mahi Patel. Hand-painted, one-of-a-kind artworks available for purchase.",
+    "Original oil paintings by Mahi. Hand-painted, one-of-a-kind artworks available for purchase.",
 };
 
 export default function RootLayout({

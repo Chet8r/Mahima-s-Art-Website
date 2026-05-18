@@ -20,7 +20,7 @@ export function ArtworkCard({ artwork }: { artwork: Artwork }) {
           className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
         />
         {isSold && (
-          <span className="absolute top-3 left-3 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] bg-navy text-cream">
+          <span className="absolute top-3 left-3 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] bg-[#7f1d1d] text-cream">
             Sold
           </span>
         )}

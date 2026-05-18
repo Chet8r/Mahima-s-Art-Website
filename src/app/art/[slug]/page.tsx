@@ -35,50 +35,50 @@ export default async function ArtworkPage({
   const isAvailable = artwork.status === "available";
 
   return (
-    <section className="mx-auto max-w-7xl px-6 sm:px-10 py-12 sm:py-16">
+    <section className="mx-auto max-w-7xl px-6 sm:px-10 py-6 sm:py-8">
       <Link
-        href="/shop"
-        className="inline-flex items-center text-sm text-navy/70 hover:text-gold transition-colors mb-10"
+        href="/#collection"
+        className="inline-flex items-center text-sm text-navy/70 hover:text-gold transition-colors mb-4"
       >
-        ← Back to shop
+        ← Back to collection
       </Link>
 
-      <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-        <div className="relative aspect-[4/5] bg-cream-soft">
-          <div className="absolute -inset-3 border border-gold/30" aria-hidden />
+      <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-12 items-center">
+        <div className="relative w-full max-w-[420px] aspect-[4/5] bg-cream-soft justify-self-center lg:justify-self-end">
+          <div className="absolute -inset-2 border border-gold/30" aria-hidden />
           <Image
             src={artwork.imageUrl}
             alt={artwork.title}
             fill
             priority
-            sizes="(min-width: 1024px) 45vw, 90vw"
+            sizes="(min-width: 1024px) 35vw, 90vw"
             className="object-cover"
           />
           {isSold && (
-            <span className="absolute top-5 left-5 px-3 py-1.5 text-xs uppercase tracking-[0.22em] bg-navy text-cream">
+            <span className="absolute top-4 left-4 px-3 py-1.5 text-xs uppercase tracking-[0.22em] bg-[#7f1d1d] text-cream">
               Sold
             </span>
           )}
           {isReserved && (
-            <span className="absolute top-5 left-5 px-3 py-1.5 text-xs uppercase tracking-[0.22em] bg-gold text-navy">
+            <span className="absolute top-4 left-4 px-3 py-1.5 text-xs uppercase tracking-[0.22em] bg-gold text-navy">
               Reserved
             </span>
           )}
         </div>
 
-        <div className="lg:pt-6">
-          <p className="text-xs uppercase tracking-[0.28em] text-gold mb-4">
+        <div>
+          <p className="text-xs uppercase tracking-[0.28em] text-gold mb-3">
             {artwork.year} · Original
           </p>
-          <h1 className="font-display text-4xl sm:text-5xl text-navy leading-tight">
+          <h1 className="font-display text-3xl sm:text-4xl text-navy leading-tight">
             {artwork.title}
           </h1>
 
-          <div className="mt-8 flex items-baseline gap-4">
+          <div className="mt-4 flex items-baseline gap-4">
             {isSold ? (
-              <p className="text-2xl text-muted">Out of stock</p>
+              <p className="text-xl text-muted">Out of stock</p>
             ) : (
-              <p className="text-3xl text-navy">{formatPrice(artwork.price)}</p>
+              <p className="text-2xl text-navy">{formatPrice(artwork.price)}</p>
             )}
             {isReserved && (
               <span className="text-xs uppercase tracking-[0.2em] text-gold">
@@ -87,7 +87,7 @@ export default async function ArtworkPage({
             )}
           </div>
 
-          <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-4 text-sm border-y border-line py-6">
+          <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-2.5 text-sm border-y border-line py-4">
             <dt className="text-muted uppercase tracking-[0.18em] text-xs">
               Medium
             </dt>
@@ -106,16 +106,16 @@ export default async function ArtworkPage({
             <dd className="text-navy">Original, 1 of 1</dd>
           </dl>
 
-          <p className="mt-8 text-base text-ink/80 leading-relaxed">
+          <p className="mt-5 text-sm text-ink/80 leading-relaxed">
             {artwork.description}
           </p>
 
-          <div className="mt-10 flex flex-wrap gap-4">
+          <div className="mt-6 flex flex-wrap gap-3">
             {isAvailable ? (
               <button
                 type="button"
                 disabled
-                className="inline-flex items-center justify-center h-12 px-8 bg-navy text-cream text-sm uppercase tracking-[0.18em] hover:bg-navy-deep transition-colors disabled:opacity-90 cursor-not-allowed"
+                className="inline-flex items-center justify-center h-11 px-7 bg-navy text-cream text-xs uppercase tracking-[0.18em] hover:bg-navy-deep transition-colors disabled:opacity-90 cursor-not-allowed"
                 title="Checkout will be wired up in a later step"
               >
                 Add to Cart
@@ -124,22 +124,21 @@ export default async function ArtworkPage({
               <button
                 type="button"
                 disabled
-                className="inline-flex items-center justify-center h-12 px-8 bg-cream-soft text-muted text-sm uppercase tracking-[0.18em] border border-line cursor-not-allowed"
+                className="inline-flex items-center justify-center h-11 px-7 bg-cream-soft text-muted text-xs uppercase tracking-[0.18em] border border-line cursor-not-allowed"
               >
                 {isSold ? "Sold" : "Reserved"}
               </button>
             )}
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center h-12 px-8 border border-navy text-navy text-sm uppercase tracking-[0.18em] hover:bg-navy hover:text-cream transition-colors"
+              className="inline-flex items-center justify-center h-11 px-7 border border-navy text-navy text-xs uppercase tracking-[0.18em] hover:bg-navy hover:text-cream transition-colors"
             >
               Enquire
             </Link>
           </div>
 
-          <p className="mt-6 text-xs text-muted">
-            Worldwide shipping arranged on request. Each painting is signed and
-            includes a certificate of authenticity.
+          <p className="mt-4 text-xs text-muted">
+            Worldwide shipping arranged on request.
           </p>
         </div>
       </div>

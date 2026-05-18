@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Contact",
-  description: "Get in touch with Mahi Patel about paintings, commissions, and exhibitions.",
+  description: "Get in touch with Mahi about paintings, commissions, and exhibitions.",
 };
 
 export default function ContactPage() {

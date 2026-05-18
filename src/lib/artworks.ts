@@ -38,9 +38,13 @@ type ArtworkWithImages = {
 };
 
 function toArtwork(row: ArtworkWithImages): Artwork {
-  const primary =
-    row.artwork_images.find((i) => i.is_primary) ??
-    [...row.artwork_images].sort((a, b) => a.position - b.position)[0];
+  const sorted = [...row.artwork_images].sort(
+    (a, b) => a.position - b.position
+  );
+  const primary = sorted.find((i) => i.is_primary) ?? sorted[0];
+  const ordered = primary
+    ? [primary, ...sorted.filter((i) => i !== primary)]
+    : sorted;
 
   return {
     id: row.id,
@@ -54,6 +58,10 @@ function toArtwork(row: ArtworkWithImages): Artwork {
     imageUrl: primary
       ? imageUrlFromPublicId(primary.cloudinary_public_id)
       : `https://picsum.photos/seed/${row.slug}/800/1000`,
+    images: ordered.map((i) => ({
+      url: imageUrlFromPublicId(i.cloudinary_public_id),
+      alt: i.alt || row.title,
+    })),
     description: row.description,
   };
 }
@@ -65,6 +73,7 @@ export async function getAllArtworks(): Promise<Artwork[]> {
   const { data, error } = await supabaseServer
     .from("artworks")
     .select(ARTWORK_COLUMNS)
+    .eq("is_published", true)
     .order("position", { ascending: true });
 
   if (error) {
@@ -82,6 +91,7 @@ export async function getArtworkBySlug(
     .from("artworks")
     .select(ARTWORK_COLUMNS)
     .eq("slug", slug)
+    .eq("is_published", true)
     .maybeSingle();
 
   if (error) {

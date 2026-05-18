@@ -21,7 +21,20 @@
       "Bash(/usr/bin/curl -s -o /dev/null -w \"%{http_code} /shop\\\\n\" http://localhost:3000/shop)",
       "Bash(/usr/bin/curl -s -o /dev/null -w \"%{http_code} /contact\\\\n\" http://localhost:3000/contact)",
       "Bash(/usr/bin/curl -s -o /dev/null -w \"%{http_code} /art/evening-harbour\\\\n\" http://localhost:3000/art/evening-harbour)",
-      "Bash(/usr/bin/curl -s -o /dev/null -w \"%{http_code} /art/does-not-exist\\\\n\" http://localhost:3000/art/does-not-exist)"
+      "Bash(/usr/bin/curl -s -o /dev/null -w \"%{http_code} /art/does-not-exist\\\\n\" http://localhost:3000/art/does-not-exist)",
+      "Bash(/usr/bin/curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(/usr/bin/curl -s -o /dev/null -w \"%{http_code} /shop \\(should be 404\\)\\\\n\" http://localhost:3000/shop)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(/usr/bin/curl -s -o /dev/null -w \"%{http_code} /admin\\\\n\" http://localhost:3000/admin)",
+      "Bash(/usr/bin/curl -s -o /dev/null -w \"%{http_code} /admin/new\\\\n\" http://localhost:3000/admin/new)",
+      "Bash(/usr/bin/curl -s -o /dev/null -w \"%{http_code} /admin/bogus-id/edit\\\\n\" http://localhost:3000/admin/bogus-id/edit)",
+      "Bash(/usr/bin/curl -s http://localhost:3000/admin)",
+      "Bash(node /tmp/test-delete.mjs)",
+      "Bash(node scripts/test-rls.mjs)",
+      "Bash(/usr/bin/curl -s -o /dev/null -w \"%{http_code} /art/field-of-cobalt\\\\n\" http://localhost:3000/art/field-of-cobalt)",
+      "Bash(/usr/bin/curl -s -o /dev/null -w \"%{http_code} /art/after-the-rain\\\\n\" http://localhost:3000/art/after-the-rain)",
+      "Bash(/usr/bin/curl -s -o /dev/null -w \"%{http_code} /art/navy-and-bone\\\\n\" http://localhost:3000/art/navy-and-bone)"
     ],
     "additionalDirectories": [
       "/private/tmp/mahima-art-scaffold/.git",

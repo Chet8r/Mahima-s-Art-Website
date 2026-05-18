@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -6,6 +5,7 @@ import {
   getArtworkBySlug,
   formatPrice,
 } from "@/lib/artworks";
+import { ArtworkGallery } from "@/components/artwork-gallery";
 
 export async function generateStaticParams() {
   const all = await getAllArtworks();
@@ -49,27 +49,23 @@ export default async function ArtworkPage({
       </Link>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-12 items-center">
-        <div className="relative w-full max-w-[420px] aspect-[4/5] bg-cream-soft justify-self-center lg:justify-self-end">
-          <div className="absolute -inset-2 border border-gold/30" aria-hidden />
-          <Image
-            src={artwork.imageUrl}
-            alt={artwork.title}
-            fill
-            priority
-            sizes="(min-width: 1024px) 35vw, 90vw"
-            className="object-cover"
-          />
-          {isSold && (
-            <span className="absolute top-4 left-4 px-3 py-1.5 text-xs uppercase tracking-[0.22em] bg-[#7f1d1d] text-cream">
-              Sold
-            </span>
-          )}
-          {isReserved && (
-            <span className="absolute top-4 left-4 px-3 py-1.5 text-xs uppercase tracking-[0.22em] bg-gold text-navy">
-              Reserved
-            </span>
-          )}
-        </div>
+        <ArtworkGallery
+          images={artwork.images}
+          badge={
+            <>
+              {isSold && (
+                <span className="absolute top-4 left-4 px-3 py-1.5 text-xs uppercase tracking-[0.22em] bg-[#7f1d1d] text-cream">
+                  Sold
+                </span>
+              )}
+              {isReserved && (
+                <span className="absolute top-4 left-4 px-3 py-1.5 text-xs uppercase tracking-[0.22em] bg-gold text-navy">
+                  Reserved
+                </span>
+              )}
+            </>
+          }
+        />
 
         <div>
           <p className="text-xs uppercase tracking-[0.28em] text-gold mb-3">

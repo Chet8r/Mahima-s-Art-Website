@@ -11,6 +11,7 @@ export type ArtworkRow = {
   status: ArtworkStatus;
   description: string;
   position: number;
+  is_published: boolean;
   created_at: string;
   updated_at: string;
 };

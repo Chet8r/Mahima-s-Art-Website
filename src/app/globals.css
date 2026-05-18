@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/*
+ * Custom variant: dark-admin:
+ * Lets us write `dark-admin:bg-foo` and have it apply only when the
+ * admin dark mode class is active on <html>. Used for the status chips
+ * and action button so they look right in both themes without needing
+ * separate components.
+ */
+@custom-variant dark-admin (&:where(.admin-dark, .admin-dark *));
+
 :root {
   --color-navy: #0b2545;
   --color-navy-deep: #081a33;
@@ -44,4 +53,97 @@ body {
   font-family: var(--font-serif), Georgia, "Times New Roman", serif;
   font-weight: 500;
   letter-spacing: -0.01em;
+}
+
+/*
+ * Admin dark mode.
+ * Activated by `<html class="admin-dark">` (set by ThemeToggle / inline boot
+ * script). The class is only ever applied while the user is inside /admin —
+ * the public site never sees these overrides.
+ *
+ * We override the same design tokens the rest of the site uses so existing
+ * classes like bg-cream, text-navy, border-line, etc. work without touching
+ * any component. The token *names* keep their original semantics (cream =
+ * background, navy = primary text, gold = accent, line = subtle border),
+ * but their values switch to a dark palette.
+ */
+html.admin-dark {
+  --color-cream: #0b1220;
+  --color-cream-soft: #131c2e;
+  --color-ink: #e6e8ec;
+  --color-muted: #9aa3b2;
+  --color-line: #25304a;
+  --color-navy: #e8ecf3;
+  --color-navy-deep: #ffffff;
+  --color-navy-soft: #b9c3d3;
+  --color-gold: #e6c878;
+  --color-gold-soft: #efd896;
+
+  --background: var(--color-cream);
+  --foreground: var(--color-ink);
+
+  color-scheme: dark;
+}
+
+/* In dark admin, plain white surfaces become a slightly elevated dark panel. */
+html.admin-dark .bg-white {
+  background-color: #182238;
+}
+
+/*
+ * Danger / SOLD red.
+ * Default red (#7f1d1d) is too dark to read on the dark navy background.
+ * In dark mode we lift it to a brighter rose and make the tinted backgrounds
+ * a bit more opaque so the SOLD pill stays legible.
+ */
+html.admin-dark .text-\[\#7f1d1d\] {
+  color: #f87171;
+}
+html.admin-dark .bg-\[\#7f1d1d\] {
+  background-color: #b91c1c;
+}
+html.admin-dark .bg-\[\#7f1d1d\]\/10 {
+  background-color: rgb(248 113 113 / 0.18);
+}
+html.admin-dark .bg-\[\#7f1d1d\]\/5 {
+  background-color: rgb(248 113 113 / 0.12);
+}
+html.admin-dark .border-\[\#7f1d1d\] {
+  border-color: #f87171;
+}
+html.admin-dark .border-\[\#7f1d1d\]\/30 {
+  border-color: rgb(248 113 113 / 0.4);
+}
+html.admin-dark .hover\:text-\[\#7f1d1d\]:hover {
+  color: #fca5a5;
+}
+html.admin-dark .hover\:border-\[\#7f1d1d\]:hover {
+  border-color: #fca5a5;
+}
+
+/*
+ * Admin font scope.
+ * Everything inside .admin-scope uses Inter — a functional UI font that
+ * reads cleanly at small sizes. Headings keep the editorial serif (Cormorant)
+ * via the .font-display class so the brand still feels consistent.
+ *
+ * We also relax the very wide letter-spacing used on labels site-wide,
+ * because uppercase tracking that looks editorial on a marketing site
+ * becomes hard to read in a dashboard.
+ */
+.admin-scope {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+.admin-scope .tracking-\[0\.18em\] {
+  letter-spacing: 0.06em;
+}
+.admin-scope .tracking-\[0\.2em\] {
+  letter-spacing: 0.06em;
+}
+.admin-scope .tracking-\[0\.22em\] {
+  letter-spacing: 0.06em;
+}
+.admin-scope .tracking-\[0\.28em\] {
+  letter-spacing: 0.08em;
 }

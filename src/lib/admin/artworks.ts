@@ -4,7 +4,17 @@ import "server-only";
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import { cloudinary } from "@/lib/cloudinary";
+import { assertAdmin } from "@/lib/admin/guard";
 import type { ArtworkStatus } from "@/lib/artwork-types";
+
+async function requireAdminOr(): Promise<ActionResult | null> {
+  try {
+    await assertAdmin();
+    return null;
+  } catch {
+    return { ok: false, error: "Not signed in." };
+  }
+}
 
 export type ArtworkFormInput = {
   slug: string;
@@ -42,6 +52,9 @@ export async function createArtwork(
   input: ArtworkFormInput,
   images: UploadedImage[]
 ): Promise<ActionResult> {
+  const unauth = await requireAdminOr();
+  if (unauth) return unauth;
+
   const db = supabaseAdmin();
 
   const { data: maxRow } = await db
@@ -97,6 +110,9 @@ export async function updateArtwork(
   id: string,
   input: ArtworkFormInput
 ): Promise<ActionResult> {
+  const unauth = await requireAdminOr();
+  if (unauth) return unauth;
+
   const db = supabaseAdmin();
   const { error } = await db
     .from("artworks")
@@ -119,6 +135,9 @@ export async function updateArtwork(
 }
 
 export async function deleteArtwork(id: string): Promise<ActionResult> {
+  const unauth = await requireAdminOr();
+  if (unauth) return unauth;
+
   const db = supabaseAdmin();
 
   const { data: imageRows, error: imgFetchError } = await db
@@ -147,6 +166,9 @@ export async function deleteArtwork(id: string): Promise<ActionResult> {
 export async function reorderArtworks(
   orderedIds: string[]
 ): Promise<ActionResult> {
+  const unauth = await requireAdminOr();
+  if (unauth) return unauth;
+
   const db = supabaseAdmin();
   for (let i = 0; i < orderedIds.length; i++) {
     const { error } = await db
@@ -163,6 +185,9 @@ export async function setArtworkPublished(
   id: string,
   isPublished: boolean
 ): Promise<ActionResult> {
+  const unauth = await requireAdminOr();
+  if (unauth) return unauth;
+
   const db = supabaseAdmin();
   const { error } = await db
     .from("artworks")
@@ -177,6 +202,9 @@ export async function addArtworkImage(
   artworkId: string,
   image: UploadedImage
 ): Promise<ActionResult> {
+  const unauth = await requireAdminOr();
+  if (unauth) return unauth;
+
   const db = supabaseAdmin();
 
   const { data: existing } = await db
@@ -208,6 +236,9 @@ export async function addArtworkImage(
 export async function deleteArtworkImage(
   imageId: string
 ): Promise<ActionResult> {
+  const unauth = await requireAdminOr();
+  if (unauth) return unauth;
+
   const db = supabaseAdmin();
 
   const { data: img, error: fetchError } = await db
@@ -254,6 +285,9 @@ export async function deleteArtworkImage(
 export async function setPrimaryImage(
   imageId: string
 ): Promise<ActionResult> {
+  const unauth = await requireAdminOr();
+  if (unauth) return unauth;
+
   const db = supabaseAdmin();
 
   const { data: img, error: fetchError } = await db

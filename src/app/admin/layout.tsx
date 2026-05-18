@@ -1,7 +1,10 @@
 import Link from "next/link";
 import Script from "next/script";
 import { Inter } from "next/font/google";
+import { cookies } from "next/headers";
 import { ThemeToggle } from "@/components/admin/theme-toggle";
+import { SignOutButton } from "@/components/admin/sign-out-button";
+import { isSessionTokenValid, SESSION_COOKIE_NAME } from "@/lib/auth";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -22,11 +25,15 @@ const themeBootScript = `
   if (t === 'dark') document.documentElement.classList.add('admin-dark');
 }catch(e){}})();`;
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  const signedIn = isSessionTokenValid(token);
+
   return (
     <>
       <Script id="admin-theme-boot" strategy="beforeInteractive">
@@ -53,8 +60,9 @@ export default function AdminLayout({
                 target="_blank"
                 className="text-xs uppercase tracking-[0.18em] text-navy hover:text-gold transition-colors"
               >
-                View site →
+                View site
               </Link>
+              {signedIn && <SignOutButton />}
             </div>
           </div>
         </header>

@@ -62,7 +62,7 @@ export async function createArtwork(
     .select("position")
     .order("position", { ascending: false })
     .limit(1)
-    .maybeSingle();
+    .maybeSingle<{ position: number }>();
 
   const nextPosition = (maxRow?.position ?? 0) + 1;
 
@@ -213,7 +213,7 @@ export async function addArtworkImage(
     .eq("artwork_id", artworkId)
     .order("position", { ascending: false })
     .limit(1)
-    .maybeSingle();
+    .maybeSingle<{ id: string; position: number }>();
 
   const nextPosition = (existing?.position ?? -1) + 1;
   const isFirst = !existing;
@@ -245,7 +245,11 @@ export async function deleteArtworkImage(
     .from("artwork_images")
     .select("artwork_id, cloudinary_public_id, is_primary")
     .eq("id", imageId)
-    .maybeSingle();
+    .maybeSingle<{
+      artwork_id: string;
+      cloudinary_public_id: string;
+      is_primary: boolean;
+    }>();
 
   if (fetchError || !img) {
     return { ok: false, error: fetchError?.message ?? "Image not found" };
@@ -269,7 +273,7 @@ export async function deleteArtworkImage(
       .eq("artwork_id", img.artwork_id)
       .order("position", { ascending: true })
       .limit(1)
-      .maybeSingle();
+      .maybeSingle<{ id: string }>();
     if (next) {
       await db
         .from("artwork_images")
@@ -294,7 +298,7 @@ export async function setPrimaryImage(
     .from("artwork_images")
     .select("artwork_id")
     .eq("id", imageId)
-    .maybeSingle();
+    .maybeSingle<{ artwork_id: string }>();
 
   if (fetchError || !img) {
     return { ok: false, error: fetchError?.message ?? "Image not found" };

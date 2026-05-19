@@ -33,16 +33,54 @@ export type Database = {
     Tables: {
       artworks: {
         Row: ArtworkRow;
-        Insert: Omit<ArtworkRow, "id" | "created_at" | "updated_at"> & {
+        Insert: {
           id?: string;
+          slug: string;
+          title: string;
+          year: number;
+          medium: string;
+          dimensions: string;
+          price_pence: number;
+          status?: ArtworkStatus;
+          description?: string;
+          position?: number;
+          is_published?: boolean;
+          created_at?: string;
+          updated_at?: string;
         };
         Update: Partial<Omit<ArtworkRow, "id" | "created_at" | "updated_at">>;
+        Relationships: [];
       };
       artwork_images: {
         Row: ArtworkImageRow;
-        Insert: Omit<ArtworkImageRow, "id" | "created_at"> & { id?: string };
+        Insert: {
+          id?: string;
+          artwork_id: string;
+          cloudinary_public_id: string;
+          alt?: string;
+          position?: number;
+          is_primary?: boolean;
+          width?: number | null;
+          height?: number | null;
+          created_at?: string;
+        };
         Update: Partial<Omit<ArtworkImageRow, "id" | "created_at">>;
+        Relationships: [
+          {
+            foreignKeyName: "artwork_images_artwork_id_fkey";
+            columns: ["artwork_id"];
+            isOneToOne: false;
+            referencedRelation: "artworks";
+            referencedColumns: ["id"];
+          }
+        ];
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: {
+      artwork_status: ArtworkStatus;
+    };
+    CompositeTypes: Record<string, never>;
   };
 };

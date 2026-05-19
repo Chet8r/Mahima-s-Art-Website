@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { stripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import {
@@ -130,6 +131,12 @@ async function handleCheckoutCompleted(rawSession: unknown) {
   if (updateError) {
     throw new Error(`Failed to mark sold: ${updateError.message}`);
   }
+
+  // Invalidate the public-site caches so the homepage and detail pages
+  // reflect the new "sold" status on the very next request. Without this
+  // Vercel's Data Cache + CDN keep serving the previous render forever.
+  revalidatePath("/", "layout");
+  revalidatePath("/art/[slug]", "page");
 
   // Build the order confirmation payload.
   const buyerEmail =

@@ -20,7 +20,7 @@ export function SiteHeader() {
             href="/"
             className="font-display text-2xl sm:text-3xl text-navy tracking-tight"
           >
-            Mahi<span className="italic text-navy-soft">Art</span>
+            Mahi <span className="italic text-navy-soft">Art</span>
           </Link>
           <nav className="flex items-center gap-8">
             {navLinks.map((link) => (

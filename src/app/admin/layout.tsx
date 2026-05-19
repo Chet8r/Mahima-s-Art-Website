@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Script from "next/script";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import { ThemeToggle } from "@/components/admin/theme-toggle";
@@ -17,14 +16,6 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-// Runs synchronously before React paints so the saved theme is applied
-// immediately on reload — no flash of light mode for dark-mode users.
-const themeBootScript = `
-(function(){try{
-  var t = localStorage.getItem('mahi-admin-theme');
-  if (t === 'dark') document.documentElement.classList.add('admin-dark');
-}catch(e){}})();`;
-
 export default async function AdminLayout({
   children,
 }: {
@@ -36,9 +27,6 @@ export default async function AdminLayout({
 
   return (
     <>
-      <Script id="admin-theme-boot" strategy="beforeInteractive">
-        {themeBootScript}
-      </Script>
       <div
         className={`admin-scope ${inter.variable} min-h-screen flex flex-col bg-cream-soft`}
       >
@@ -48,7 +36,7 @@ export default async function AdminLayout({
               href="/admin"
               className="font-display text-xl text-navy tracking-tight"
             >
-              Mahi<span className="italic text-navy-soft">Art</span>
+              Mahi <span className="italic text-navy-soft">Art</span>
               <span className="ml-3 text-xs uppercase tracking-[0.22em] text-gold">
                 Admin
               </span>

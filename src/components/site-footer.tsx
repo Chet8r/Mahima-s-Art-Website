@@ -5,9 +5,13 @@ export function SiteFooter() {
     <footer className="border-t border-line bg-navy text-cream">
       <div className="mx-auto max-w-7xl px-6 sm:px-10 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-baseline gap-3">
-          <p className="font-display text-xl">
-            Mahi<span className="italic text-gold-soft">Art</span>
-          </p>
+          <Link
+            href="/admin"
+            aria-label="Admin"
+            className="font-display text-xl hover:text-gold transition-colors"
+          >
+            Mahi <span className="italic text-gold-soft">Art</span>
+          </Link>
           <p className="text-xs text-cream/60 hidden sm:block">
             Original paintings, hand-painted in-house.
           </p>
@@ -42,7 +46,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-cream/10">
         <div className="mx-auto max-w-7xl px-6 sm:px-10 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-cream/60">
-          <span>© {new Date().getFullYear()} Mahi. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} Mahi Art. All rights reserved.</span>
           <div className="flex items-center gap-5">
             <Link
               href="/privacy"

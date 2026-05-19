@@ -75,6 +75,12 @@ export type Database = {
           }
         ];
       };
+      processed_webhooks: {
+        Row: { event_id: string; processed_at: string };
+        Insert: { event_id: string; processed_at?: string };
+        Update: { event_id?: string; processed_at?: string };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

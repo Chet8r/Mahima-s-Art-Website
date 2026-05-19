@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { CartDrawer } from "./cart-drawer";
+import { useCart } from "@/lib/cart/cart-context";
 
 const navLinks = [
   { href: "/contact", label: "Contact" },
@@ -10,7 +11,10 @@ const navLinks = [
 
 export function SiteHeader() {
   const [cartOpen, setCartOpen] = useState(false);
-  const itemCount = 0;
+  const { count, ready } = useCart();
+  // Only show the badge after hydration, so SSR (count=0) and client first
+  // paint match — avoids the badge popping in.
+  const itemCount = ready ? count : 0;
 
   return (
     <>

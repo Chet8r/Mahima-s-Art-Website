@@ -6,6 +6,7 @@ import {
   formatPrice,
 } from "@/lib/artworks";
 import { ArtworkGallery } from "@/components/artwork-gallery";
+import { AddToCartButton } from "@/components/add-to-cart-button";
 
 export async function generateStaticParams() {
   const all = await getAllArtworks();
@@ -113,14 +114,16 @@ export default async function ArtworkPage({
 
           <div className="mt-6 flex flex-wrap gap-3">
             {isAvailable ? (
-              <button
-                type="button"
-                disabled
-                className="inline-flex items-center justify-center h-11 px-7 bg-navy text-cream text-xs uppercase tracking-[0.18em] hover:bg-navy-deep transition-colors disabled:opacity-90 cursor-not-allowed"
-                title="Checkout will be wired up in a later step"
-              >
-                Add to Cart
-              </button>
+              <AddToCartButton
+                item={{
+                  id: artwork.id,
+                  slug: artwork.slug,
+                  title: artwork.title,
+                  imageUrl: artwork.imageUrl,
+                  pricePence: Math.round(artwork.price * 100),
+                  statusAtAdd: artwork.status,
+                }}
+              />
             ) : (
               <button
                 type="button"

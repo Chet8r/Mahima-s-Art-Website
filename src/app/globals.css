@@ -2,12 +2,13 @@
 
 /*
  * Custom variant: dark-admin:
- * Lets us write `dark-admin:bg-foo` and have it apply only when the
- * admin dark mode class is active on <html>. Used for the status chips
- * and action button so they look right in both themes without needing
- * separate components.
+ * Lets us write `dark-admin:bg-foo` and have it apply only when:
+ *   1. <html> has the admin-dark class, AND
+ *   2. the element is inside .admin-scope (the admin layout wrapper).
+ * The .admin-scope requirement guarantees public pages never receive
+ * dark styles even if the html class hasn't been cleaned up yet.
  */
-@custom-variant dark-admin (&:where(.admin-dark, .admin-dark *));
+@custom-variant dark-admin (&:where(.admin-dark .admin-scope, .admin-dark .admin-scope *));
 
 :root {
   --color-navy: #0b2545;
@@ -67,7 +68,14 @@ body {
  * background, navy = primary text, gold = accent, line = subtle border),
  * but their values switch to a dark palette.
  */
-html.admin-dark {
+/*
+ * Critical: all dark-mode overrides require BOTH `html.admin-dark` AND a
+ * `.admin-scope` ancestor. This guarantees the public site never goes
+ * dark even if the html class is lingering (e.g. user toggled dark in
+ * admin, then navigated to a public page — the class can briefly persist
+ * before ThemeToggle's cleanup runs).
+ */
+html.admin-dark .admin-scope {
   --color-cream: #0b1220;
   --color-cream-soft: #131c2e;
   --color-ink: #e6e8ec;
@@ -82,11 +90,13 @@ html.admin-dark {
   --background: var(--color-cream);
   --foreground: var(--color-ink);
 
+  background-color: var(--color-cream);
+  color: var(--color-ink);
   color-scheme: dark;
 }
 
-/* In dark admin, plain white surfaces become a slightly elevated dark panel. */
-html.admin-dark .bg-white {
+/* Plain white surfaces become a slightly elevated dark panel. */
+html.admin-dark .admin-scope .bg-white {
   background-color: #182238;
 }
 
@@ -96,28 +106,28 @@ html.admin-dark .bg-white {
  * In dark mode we lift it to a brighter rose and make the tinted backgrounds
  * a bit more opaque so the SOLD pill stays legible.
  */
-html.admin-dark .text-\[\#7f1d1d\] {
+html.admin-dark .admin-scope .text-\[\#7f1d1d\] {
   color: #f87171;
 }
-html.admin-dark .bg-\[\#7f1d1d\] {
+html.admin-dark .admin-scope .bg-\[\#7f1d1d\] {
   background-color: #b91c1c;
 }
-html.admin-dark .bg-\[\#7f1d1d\]\/10 {
+html.admin-dark .admin-scope .bg-\[\#7f1d1d\]\/10 {
   background-color: rgb(248 113 113 / 0.18);
 }
-html.admin-dark .bg-\[\#7f1d1d\]\/5 {
+html.admin-dark .admin-scope .bg-\[\#7f1d1d\]\/5 {
   background-color: rgb(248 113 113 / 0.12);
 }
-html.admin-dark .border-\[\#7f1d1d\] {
+html.admin-dark .admin-scope .border-\[\#7f1d1d\] {
   border-color: #f87171;
 }
-html.admin-dark .border-\[\#7f1d1d\]\/30 {
+html.admin-dark .admin-scope .border-\[\#7f1d1d\]\/30 {
   border-color: rgb(248 113 113 / 0.4);
 }
-html.admin-dark .hover\:text-\[\#7f1d1d\]:hover {
+html.admin-dark .admin-scope .hover\:text-\[\#7f1d1d\]:hover {
   color: #fca5a5;
 }
-html.admin-dark .hover\:border-\[\#7f1d1d\]:hover {
+html.admin-dark .admin-scope .hover\:border-\[\#7f1d1d\]:hover {
   border-color: #fca5a5;
 }
 

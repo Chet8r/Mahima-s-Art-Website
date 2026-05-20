@@ -9,10 +9,7 @@ export function ArtworkCard({ artwork }: { artwork: Artwork }) {
   const secondImage = artwork.images[1];
 
   return (
-    <Link
-      href={`/art/${artwork.slug}`}
-      className="group block"
-    >
+    <Link href={`/art/${artwork.slug}`} className="group block">
       <div className="relative aspect-[4/5] overflow-hidden bg-cream-soft p-3 sm:p-4">
         <Image
           src={artwork.imageUrl}
@@ -53,9 +50,9 @@ export function ArtworkCard({ artwork }: { artwork: Artwork }) {
             {artwork.medium} · {artwork.dimensions}
           </p>
         </div>
-        <p className="text-sm text-navy whitespace-nowrap pt-1">
+        <p className="text-sm font-semibold text-navy whitespace-nowrap pt-0.5">
           {isSold ? (
-            <span className="text-muted">Out of stock</span>
+            <span className="text-sm font-normal text-muted">Out of stock</span>
           ) : (
             formatPrice(artwork.price)
           )}

@@ -17,9 +17,9 @@ export async function POST() {
   }
 
   const standard = await stripe.shippingRates.create({
-    display_name: "UK Standard Delivery (tracked, 2–5 working days)",
+    display_name: "UK Standard Delivery",
     type: "fixed_amount",
-    fixed_amount: { amount: 800, currency: "gbp" },
+    fixed_amount: { amount: 400, currency: "gbp" },
     delivery_estimate: {
       minimum: { unit: "business_day", value: 2 },
       maximum: { unit: "business_day", value: 5 },
@@ -27,9 +27,9 @@ export async function POST() {
   });
 
   const express = await stripe.shippingRates.create({
-    display_name: "UK Express Delivery (signed for, next working day)",
+    display_name: "UK Express Delivery",
     type: "fixed_amount",
-    fixed_amount: { amount: 1200, currency: "gbp" },
+    fixed_amount: { amount: 800, currency: "gbp" },
     delivery_estimate: {
       minimum: { unit: "business_day", value: 1 },
       maximum: { unit: "business_day", value: 2 },

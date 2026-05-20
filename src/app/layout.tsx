@@ -17,7 +17,7 @@ const cormorant = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   title: {
-    default: "Mahi Art — Original Oil Paintings",
+    default: "Mahi Art - Original Oil Paintings",
     template: "%s — Mahi Art",
   },
   description:
